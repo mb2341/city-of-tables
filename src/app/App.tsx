@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import emblemSrc from "@/imports/d73208ce-cc7a-4b5a-aa75-c9c66dee6782.png";
 import wordmarkSrc from "@/imports/ad9c17b8-429d-408f-ba87-6f80829c1be7-1.png";
+import bgVideo from "@/imports/Lasvegashyperlapse_bg.mp4";
 import { motion } from "motion/react";
-
-const BG_URL =
-  "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxMYXMlMjBWZWdhcyUyMHN0cmlwJTIwbmlnaHQlMjBsaWdodHMlMjBsdXh1cnl8ZW58MXx8fHwxNzgyMzMwOTE0fDA&ixlib=rb-4.1.0&q=80&w=1080";
 
 function CrestEmblem() {
   return (
@@ -59,10 +57,14 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-background">
-      {/* Background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${BG_URL})` }}
+      {/* Background video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src={bgVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
         aria-hidden="true"
       />
 
@@ -86,70 +88,6 @@ export default function App() {
         aria-hidden="true"
       />
 
-      {/* Perspective road light streaks — radiate from vanishing point */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <style>{`
-          @keyframes vp-streak {
-            0%   { transform: rotate(var(--a)) translateX(2%) scaleX(0.04); opacity: 0; }
-            8%   { opacity: var(--op); }
-            88%  { opacity: var(--op); }
-            100% { transform: rotate(var(--a)) translateX(160%) scaleX(1); opacity: 0; }
-          }
-          .vp-ray {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: var(--h);
-            width: var(--w);
-            transform-origin: 0% 50%;
-            border-radius: 999px;
-            will-change: transform, opacity;
-            animation: vp-streak var(--dur) var(--delay) linear infinite;
-          }
-        `}</style>
-
-        {/* Vanishing point anchor — sits at the road horizon (~53% down, dead center) */}
-        <div className="absolute" style={{ top: "53%", left: "50%" }}>
-          {[
-            /* Right lanes — warm headlights fanning toward bottom-right */
-            { a:  8,  w: "55vw", h: "1.5px", op: 0.55, dur: "1.5s", delay: "0.0s",  color: "rgba(255,225,130,0.9)" },
-            { a: 14,  w: "62vw", h: "1px",   op: 0.45, dur: "1.9s", delay: "0.6s",  color: "rgba(255,210,90,0.9)"  },
-            { a: 20,  w: "50vw", h: "2px",   op: 0.50, dur: "1.3s", delay: "1.2s",  color: "rgba(255,240,160,0.9)" },
-            { a: 26,  w: "68vw", h: "1px",   op: 0.38, dur: "2.1s", delay: "0.3s",  color: "rgba(220,170,60,0.9)"  },
-            { a: 33,  w: "45vw", h: "1.5px", op: 0.42, dur: "1.7s", delay: "1.8s",  color: "rgba(255,200,80,0.9)"  },
-            { a: 10,  w: "70vw", h: "1px",   op: 0.30, dur: "2.5s", delay: "2.4s",  color: "rgba(255,220,120,0.9)" },
-            { a: 18,  w: "40vw", h: "2.5px", op: 0.48, dur: "1.1s", delay: "0.9s",  color: "rgba(255,245,180,0.9)" },
-            { a: 28,  w: "58vw", h: "1px",   op: 0.35, dur: "2.3s", delay: "1.5s",  color: "rgba(200,150,50,0.9)"  },
-            { a:  6,  w: "48vw", h: "1px",   op: 0.40, dur: "1.6s", delay: "3.1s",  color: "rgba(255,230,140,0.9)" },
-            { a: 22,  w: "75vw", h: "1.5px", op: 0.32, dur: "2.8s", delay: "0.4s",  color: "rgba(240,200,80,0.9)"  },
-
-            /* Left lanes — cool red tail-lights fanning toward bottom-left */
-            { a: -8,  w: "55vw", h: "1.5px", op: 0.50, dur: "1.6s", delay: "0.2s",  color: "rgba(230,55,55,0.9)"   },
-            { a:-14,  w: "60vw", h: "1px",   op: 0.42, dur: "2.0s", delay: "0.8s",  color: "rgba(210,40,40,0.9)"   },
-            { a:-20,  w: "50vw", h: "2px",   op: 0.48, dur: "1.4s", delay: "1.4s",  color: "rgba(245,70,70,0.9)"   },
-            { a:-27,  w: "65vw", h: "1px",   op: 0.36, dur: "2.2s", delay: "0.5s",  color: "rgba(200,35,35,0.9)"   },
-            { a:-33,  w: "44vw", h: "1.5px", op: 0.40, dur: "1.8s", delay: "2.0s",  color: "rgba(220,60,60,0.9)"   },
-            { a:-10,  w: "72vw", h: "1px",   op: 0.28, dur: "2.6s", delay: "2.7s",  color: "rgba(235,65,65,0.9)"   },
-            { a:-18,  w: "42vw", h: "2px",   op: 0.44, dur: "1.2s", delay: "1.0s",  color: "rgba(255,80,80,0.9)"   },
-            { a:-24,  w: "56vw", h: "1px",   op: 0.33, dur: "2.4s", delay: "1.7s",  color: "rgba(190,30,30,0.9)"   },
-          ].map((s, i) => (
-            <div
-              key={i}
-              className="vp-ray"
-              style={{
-                "--a": `${s.a}deg`,
-                "--w": s.w,
-                "--h": s.h,
-                "--op": s.op,
-                "--dur": s.dur,
-                "--delay": s.delay,
-                background: `linear-gradient(to right, ${s.color} 0%, ${s.color} 60%, transparent 100%)`,
-                filter: `blur(${Math.abs(s.a) > 20 ? 2 : 1}px)`,
-              } as React.CSSProperties}
-            />
-          ))}
-        </div>
-      </div>
 
       {/* Vertical edge accent lines */}
       <div className="absolute inset-y-0 left-6 md:left-10 w-px pointer-events-none z-10"
@@ -191,7 +129,7 @@ export default function App() {
           <img
             src={wordmarkSrc}
             alt="City of Tables"
-            className="w-[clamp(11rem,45vw,26rem)] object-contain"
+            className="w-[clamp(16rem,65vw,38rem)] object-contain"
           />
         </motion.div>
 
